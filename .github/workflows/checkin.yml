@@ -1,0 +1,22 @@
+name: 每日自动签到
+
+on:
+  schedule:
+    - cron: '8 20 * * *'
+  workflow_dispatch: # 支持手动点击一键测试
+
+jobs:
+  checkin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: 安装依赖
+        run: npm install puppeteer
+      - name: 执行签到
+        env:
+          USERNAME: ${{ secrets.MANHUA_USER }}
+          PASSWORD: ${{ secrets.MANHUA_PWD }}
+        run: node checkin.js
